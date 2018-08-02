@@ -1,0 +1,86 @@
+@import "variables";
+
+.app {
+  padding: 0 30px;
+  max-width: 500px;
+  height: 500px; 
+  margin: 0 auto; 
+  font-family: $font-family;
+  background-color: $primary;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  flex-direction: column;
+  box-shadow: 0 0 0 10px $secondary;
+
+  a {
+    width: 100%;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .button-styles {
+    border-radius: 4px;
+    border-width: 1px;
+    cursor: pointer;
+    height: 50px;
+    margin: 5px 0;
+    width: 100%;
+  }
+
+  input:focus, button:focus,
+  input:hover, button:hover {
+    outline: none;
+    box-shadow: 0 0 0 4px $secondary;
+  }
+  
+  .form {
+    width: 100%;
+    color: $secondary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: $font-family;
+  
+    .error-msg {
+      height: 60px;
+      font-size: 25px;
+      line-height: 29px;
+    }
+  
+    .inputContainer {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-column-gap: 5px;
+    }
+  
+    input, button {
+      font-family: inherit;
+      border: none;
+      text-align: center;
+    }
+  
+    input::placeholder {
+      text-align: center;
+    }
+}
+
+}
+
+@media (max-width: 600px) {
+  .app {
+    .form {
+      .inputContainer {
+        grid-template-columns: 1fr;
+      }
+      .error-msg {
+        font-size: 19px;
+      }
+    }
+  }
+}
+
