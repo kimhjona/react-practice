@@ -10,20 +10,18 @@ interface WelcomeProps {
 }
 
 class Welcome extends React.PureComponent<WelcomeProps> {
-
   render() {
     const { store } = this.props;
-    console.log("this.props succes", this.props);
-    if (store.getState().isLoggedIn) {
 
-      return (
-        <Success store={store} />
-      )
-    } else {
-
-
-      return <Redirect to="/" />
-    }
+    return (
+      <>
+        {
+          store.getState().isLoggedIn ?
+            <Success store={store} /> :
+            <Redirect to="/" />
+        }
+      </>
+    )
   }
 }
 

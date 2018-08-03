@@ -8,16 +8,7 @@ interface InputProps {
   onChange: (e: React.ChangeEvent<HTMLFormElement>) => void;
 }
 
-const inputStyles = {
-  border: "1px solid ##3e3f44",
-  borderRadius: "4px",
-  height: "30px",
-  margin: "5px 0",
-  padding: "0",
-  width: "100%",
-}
-
-class Input extends React.Component<InputProps> {
+class Input extends React.PureComponent<InputProps> {
   componentWillUpdate(nextProps: InputProps) {
     console.log("will update?")
     console.log(nextProps);
@@ -37,7 +28,6 @@ class Input extends React.Component<InputProps> {
       <>
         <input
           placeholder={placeholder}
-          style={inputStyles}
           // tslint:disable-next-line:no-any
           onChange={(e: any) => onChange(e.target)}
           type={type}

@@ -56,6 +56,14 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-column-gap: 5px;
+      
+      input {
+        border-radius: 4px;
+        height: 30px;
+        margin: 5px 0;
+        padding: 0;
+        width: 100%;
+      }
     }
   
     input, button {

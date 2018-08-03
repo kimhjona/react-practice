@@ -1,11 +1,3 @@
-// // const rewireTypescript = require('react-app-rewire-typescript');
-
-module.exports = function override(config, env) {
-  config = rewireSass(config, env);
-
-  return config;
-}
-
 const rewired = require('react-app-rewired');
 
 function rewireSass(config) {
@@ -21,6 +13,12 @@ function rewireSass(config) {
 
   const oneOf = config.module.rules.find(rule => rule.oneOf).oneOf;
   oneOf.unshift(sassLoader);
+
+  return config;
+}
+
+module.exports = function override(config, env) {
+  config = rewireSass(config, env);
 
   return config;
 }
