@@ -1,14 +1,19 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import App from './App';
+import AppContainer from './components/AppContainer';
+import Welcome from './modules/Welcome';
+// import Root from './modules/Root';
 import './styles/app.scss';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
-  Link,
   Route,
 } from "react-router-dom";
-import { createStore } from 'redux';
+import {
+  createStore,
+  // applyMiddleware 
+} from 'redux';
+// import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   persistReducer,
   persistStore,
@@ -16,29 +21,12 @@ import {
 import { PersistGate } from 'redux-persist/integration/react'
 import storage from 'redux-persist/lib/storage';
 import inputFunctions from './redux/reducers';
-// import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './registerServiceWorker';
 
 const persistConfig = {
   key: 'root',
   storage,
 }
-
-const AppContainer = (): JSX.Element => (
-  <>
-    <App store={store} />
-  </>
-)
-
-const Success = (): JSX.Element => (
-  <div className="app">
-    <h1 className="center">Congratulations! You've successfully logged in.</h1>
-    <Link to="/">
-      <button className="button-styles">
-        Log Out
-    </button>
-    </Link>
-  </div>
-)
 
 const persistedReducer = persistReducer(persistConfig, inputFunctions)
 
@@ -55,14 +43,17 @@ ReactDOM.render(
     <PersistGate loading={null} persistor={persistor}>
       <Router>
         <div>
+          {/* <Root
+            store={store}
+          /> */}
           <Route
             exact={true}
             path="/"
-            component={AppContainer}
+            render={props => <AppContainer {...props} store={store} />}
           />
           <Route
             path="/welcome"
-            component={Success}
+            render={props => <Welcome {...props} store={store} />}
           />
         </div>
       </Router>
@@ -70,4 +61,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root') as HTMLElement
 );
-// registerServiceWorker();
+registerServiceWorker();

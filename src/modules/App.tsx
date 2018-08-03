@@ -1,19 +1,19 @@
 import * as React from 'react';
-import Button from './components/Button';
-import Input from './components/Input';
+import Button from '../components/Button';
+import Input from '../components/Input';
 import {
-  logOut,
+  isLoggedIn,
   resetForm,
   saveTextInput,
-  successfulLogin,
-} from './redux/actions';
-import './styles/app.scss';
-import { setPassword } from "./password";
+} from '../redux/actions';
+import '../styles/app.scss';
+import { setPassword } from "../password";
 import { Redirect } from 'react-router-dom';
 
 interface AppProps {
   // tslint:disable-next-line:no-any
   store: { dispatch: (text: object) => void, getState: any };
+  label?: string;
 }
 
 class App extends React.Component<AppProps> {
@@ -23,7 +23,6 @@ class App extends React.Component<AppProps> {
   }
   onButtonClick = (e: React.ChangeEvent<HTMLFormElement>) => {
     const { store } = this.props;
-    // console.log(e.target.type);
     if (e.target.type === "submit") {
       this.onSubmit(e);
     } else {
@@ -45,7 +44,8 @@ class App extends React.Component<AppProps> {
       console.log("success?")
       this.forceUpdate();
 
-      return store.dispatch(successfulLogin())
+      return store.dispatch(isLoggedIn())
+
     } else {
       this.setState({ isErrorMsgShown: true })
     }
@@ -61,10 +61,11 @@ class App extends React.Component<AppProps> {
 
   render() {
     const { isErrorMsgShown } = this.state;
-    const { store } = this.props;
+    const { store, label } = this.props;
 
-    if (store.getState().url === "welcome") {
-      store.dispatch(logOut());
+    console.log("label", label);
+
+    if (store.getState().isLoggedIn) {
 
       return <Redirect to="/welcome" />
     };
@@ -77,7 +78,9 @@ class App extends React.Component<AppProps> {
             this.onSubmit(e)
           )}
           className="form"
-        >
+        > {
+            label
+          }
           {isErrorMsgShown ?
             <div className="error-msg center">Error: your login information is incorrect. Try again.</div>
             :
