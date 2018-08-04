@@ -2,18 +2,20 @@ import * as React from 'react';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import {
-  isLoggedIn,
+  logIn,
   resetForm,
   saveTextInput,
 } from '../redux/actions';
 import '../styles/app.scss';
 import { setPassword } from "../password";
-import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux'
 
 interface AppProps {
-  // tslint:disable-next-line:no-any
-  store: { dispatch: (text: object) => void, getState: any };
-  label?: string;
+  history?: { action: string }
+  text: string;
+  logIn: typeof logIn;
+  resetForm: typeof resetForm;
+  saveTextInput: typeof saveTextInput,
 }
 
 class App extends React.Component<AppProps> {
@@ -21,54 +23,39 @@ class App extends React.Component<AppProps> {
     isErrorMsgShown: false,
     password: "",
   }
+
   onButtonClick = (e: React.ChangeEvent<HTMLFormElement>) => {
-    const { store } = this.props;
+    const { resetForm } = this.props;
     if (e.target.type === "submit") {
       this.onSubmit(e);
     } else {
-      this.forceUpdate()
-      this.setState({ isErrorMsgShown: false })
-
-      return store.dispatch(resetForm())
+      this.setState({ isErrorMsgShown: false, password: "" })
+      resetForm()
     };
   }
-  // tslint:disable-next-line:no-any
+
   onSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     const { password } = this.state;
-    const { store } = this.props;
+    const { logIn, text } = this.props;
     const regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const username = store.getState().text;
+    const username = text;
     e.preventDefault();
-
-    if (regex.test(username) && password === setPassword) {
-      console.log("success?")
-      this.forceUpdate();
-
-      return store.dispatch(isLoggedIn())
-
-    } else {
+    regex.test(username) && password === setPassword ?
+      logIn() :
       this.setState({ isErrorMsgShown: true })
-    }
   }
 
   updateInput = (target: { value: string, type: string }) => {
-    const { store } = this.props;
+    const { saveTextInput } = this.props;
 
     target.type === "text" ?
-      store.dispatch(saveTextInput(target.value)) :
+      saveTextInput(target.value) :
       this.setState({ password: target.value });
   }
 
   render() {
-    const { isErrorMsgShown } = this.state;
-    const { store, label } = this.props;
-
-    console.log("label", label);
-
-    if (store.getState().isLoggedIn) {
-
-      return <Redirect to="/welcome" />
-    };
+    const { isErrorMsgShown, password } = this.state;
+    const { history, text } = this.props;
 
     return (
       <div className={"app"}>
@@ -78,9 +65,8 @@ class App extends React.Component<AppProps> {
             this.onSubmit(e)
           )}
           className="form"
-        > {
-            label
-          }
+        >
+          {history && history.action === "REPLACE" ? "You must be logged in to continue" : ""}
           {isErrorMsgShown ?
             <div className="error-msg center">Error: your login information is incorrect. Try again.</div>
             :
@@ -91,26 +77,24 @@ class App extends React.Component<AppProps> {
               // tslint:disable-next-line:no-any
               onChange={(e: any) => this.updateInput(e)}
               placeholder={"Email Address"}
-              store={store}
+              text={text}
               type={"text"}
             />
             <Input
               // tslint:disable-next-line:no-any
               onChange={(e: any) => this.updateInput(e)}
               placeholder={"Password..."}
-              store={store}
+              text={password}
               type={"password"}
             />
           </span>
           <Button
             label={"Submit"}
-            store={store}
             type={"submit"}
             onClick={(e: React.ChangeEvent<HTMLFormElement>) => this.onButtonClick(e)}
           />
           <Button
             label={"Reset"}
-            store={store}
             type={"reset"}
             onClick={(e: React.ChangeEvent<HTMLFormElement>) => this.onButtonClick(e)}
           />
@@ -120,4 +104,14 @@ class App extends React.Component<AppProps> {
   }
 }
 
-export default App;
+// tslint:disable-next-line:no-any
+const mapStateToProps = (state: any) => ({
+  isLoggedIn: state.isLoggedIn,
+  text: state.text,
+})
+
+export const AppWrapped = connect(mapStateToProps, {
+  logIn,
+  resetForm,
+  saveTextInput,
+})(App)

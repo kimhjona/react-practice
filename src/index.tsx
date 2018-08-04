@@ -1,13 +1,10 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import AppContainer from './components/AppContainer';
-import Welcome from './modules/Welcome';
-// import Root from './modules/Root';
+import { RouteContainerWrapped as RouteContainer } from './RouteContainer';
 import './styles/app.scss';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
-  Route,
 } from "react-router-dom";
 import {
   createStore,
@@ -42,20 +39,7 @@ ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <Router>
-        <div>
-          {/* <Root
-            store={store}
-          /> */}
-          <Route
-            exact={true}
-            path="/"
-            render={props => <AppContainer {...props} store={store} />}
-          />
-          <Route
-            path="/welcome"
-            render={props => <Welcome {...props} store={store} />}
-          />
-        </div>
+        <RouteContainer />
       </Router>
     </PersistGate>
   </Provider>,

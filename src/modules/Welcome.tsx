@@ -1,28 +1,39 @@
 import * as React from 'react';
-import Success from '../components/Success';
+import Button from '../components/Button';
 import {
-  Redirect
+  Link,
 } from "react-router-dom";
+import { logOut } from 'redux/actions';
+import { connect } from 'react-redux'
 
 interface WelcomeProps {
-  // tslint:disable-next-line:no-any
-  store: { dispatch: (text: any) => void, getState: any };
+  logOut: typeof logOut;
 }
 
 class Welcome extends React.PureComponent<WelcomeProps> {
   render() {
-    const { store } = this.props;
+    const { logOut } = this.props;
 
     return (
       <>
-        {
-          store.getState().isLoggedIn ?
-            <Success store={store} /> :
-            <Redirect to="/" />
-        }
+        <div className="app" >
+          <h1 className="center">Congratulations! You've Successfully logged in.</h1>
+          <Link to='/'>
+            <Button
+              type="submit"
+              onClick={() => logOut()}
+              label="Log out"
+            />
+          </Link>
+        </div >
       </>
     )
   }
 }
 
-export default Welcome;
+// tslint:disable-next-line:no-any
+const mapStateToProps = (state: any) => ({
+  isLoggedIn: state.isLoggedIn
+})
+
+export const WelcomeWrapped = connect(mapStateToProps, { logOut })(Welcome)

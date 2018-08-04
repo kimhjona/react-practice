@@ -13,10 +13,10 @@ const inputFunctions = (state: object, action: ActionParams) => {
       return { ...state }
     case "CLEAR":
       return { ...state, text: "" }
-    case "ISLOGGEDIN":
+    case "LOGIN":
       return { ...state, text: "", isLoggedIn: true }
     case "LOGOUT":
-      return { ...state, url: "", isLoggedIn: false }
+      return { ...state, isLoggedIn: false }
       break;
     default:
       return state;
