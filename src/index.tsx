@@ -7,7 +7,7 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 import {
-  applyMiddleware,
+  // applyMiddleware,
   createStore,
 } from 'redux';
 // import { composeWithDevTools } from 'redux-devtools-extension';
