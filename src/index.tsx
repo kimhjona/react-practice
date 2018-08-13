@@ -7,10 +7,10 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 import {
+  applyMiddleware,
   createStore,
-  // applyMiddleware 
 } from 'redux';
-// import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   persistReducer,
   persistStore,
@@ -29,8 +29,7 @@ const persistedReducer = persistReducer(persistConfig, inputFunctions)
 
 const store = createStore(
   persistedReducer,
-  // tslint:disable-next-line:no-any
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+  composeWithDevTools(applyMiddleware())
 );
 
 const persistor = persistStore(store);

@@ -2,7 +2,6 @@ import * as React from 'react';
 
 interface InputProps {
   placeholder: string;
-  // tslint:disable-next-line:no-any
   text: string;
   type: string;
   onChange: (e: React.ChangeEvent<HTMLFormElement>) => void;

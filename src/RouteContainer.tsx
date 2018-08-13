@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { connect } from 'react-redux';
 import { logIn } from 'redux/actions';
+import { StoreState } from 'redux/reducers';
 
 interface RouteContainerProps extends RouteComponentProps<{}> {
   isLoggedIn: boolean;
@@ -40,8 +41,7 @@ export class RouteContainer extends React.PureComponent<RouteContainerProps> {
   }
 }
 
-// tslint:disable-next-line:no-any
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: StoreState) => ({
   isLoggedIn: state.isLoggedIn
 })
 

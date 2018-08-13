@@ -2,7 +2,6 @@ import * as React from 'react';
 
 interface ButtonProps {
   label: string;
-  // tslint:disable-next-line:no-any
   type: string;
   onClick: (e: React.ChangeEvent<HTMLFormElement>) => void;
 }

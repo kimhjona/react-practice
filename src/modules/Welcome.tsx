@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import { logOut } from 'redux/actions';
 import { connect } from 'react-redux'
+import { StoreState } from '../redux/reducers';
 
 interface WelcomeProps {
   logOut: typeof logOut;
@@ -31,8 +32,7 @@ class Welcome extends React.PureComponent<WelcomeProps> {
   }
 }
 
-// tslint:disable-next-line:no-any
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: StoreState) => ({
   isLoggedIn: state.isLoggedIn
 })
 

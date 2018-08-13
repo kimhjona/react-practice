@@ -23,4 +23,10 @@ const inputFunctions = (state: object, action: ActionParams) => {
   }
 }
 
+export interface StoreState {
+  isLoggedIn: boolean;
+  text: string;
+}
+
+
 export default inputFunctions;

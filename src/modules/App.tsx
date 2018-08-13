@@ -9,6 +9,7 @@ import {
 import '../styles/app.scss';
 import { setPassword } from "../password";
 import { connect } from 'react-redux'
+import { StoreState } from '../redux/reducers';
 
 interface AppProps {
   history?: { action: string }
@@ -104,8 +105,7 @@ class App extends React.Component<AppProps> {
   }
 }
 
-// tslint:disable-next-line:no-any
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: StoreState) => ({
   isLoggedIn: state.isLoggedIn,
   text: state.text,
 })
