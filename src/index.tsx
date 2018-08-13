@@ -10,7 +10,7 @@ import {
   applyMiddleware,
   createStore,
 } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+// import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   persistReducer,
   persistStore,
@@ -29,7 +29,7 @@ const persistedReducer = persistReducer(persistConfig, inputFunctions)
 
 const store = createStore(
   persistedReducer,
-  composeWithDevTools(applyMiddleware())
+  // composeWithDevTools(applyMiddleware())
 );
 
 const persistor = persistStore(store);
