@@ -3,15 +3,17 @@
 .app {
   padding: 0 30px;
   max-width: 500px;
-  height: 500px; 
-  margin: 0 auto; 
+  height: 500px;
+  margin: 0 auto;
   font-family: $font-family;
   background-color: $primary;
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  box-shadow: 0 0 0 10px $secondary;
+  // this is just a border
+  // box-shadow: 0 0 0 10px $secondary;
+  border: 10px solid $secondary;
 
   a {
     width: 100%;
@@ -21,7 +23,27 @@
     text-align: center;
   }
 
-  .button-styles {
+  // obviously these are styles :P
+  // .button-styles {
+
+  // }
+
+  input,
+  button {
+    font-family: inherit;
+    border: none;
+    text-align: center;
+  }
+
+  input {
+    border-radius: 4px;
+    height: 30px;
+    margin: 5px 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  button {
     border-radius: 4px;
     border-width: 1px;
     cursor: pointer;
@@ -30,18 +52,14 @@
     width: 100%;
   }
 
-  input:focus, button:focus,
-  input:hover, button:hover {
+  input:focus,
+  button:focus,
+  input:hover,
+  button:hover {
     outline: none;
     box-shadow: 0 0 0 4px $secondary;
   }
 
-  input, button {
-    font-family: inherit;
-    border: none;
-    text-align: center;
-  }
-  
   .form {
     width: 100%;
     color: $secondary;
@@ -50,33 +68,25 @@
     align-items: center;
     flex-direction: column;
     font-family: $font-family;
-  
+
     .error-msg {
       height: 60px;
       font-size: 25px;
       line-height: 29px;
     }
-  
+
+    // this should be hyphenated
     .inputContainer {
       width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-column-gap: 5px;
-      
-      input {
-        border-radius: 4px;
-        height: 30px;
-        margin: 5px 0;
-        padding: 0;
-        width: 100%;
-      }
     }
-  
+
     input::placeholder {
       text-align: center;
     }
-}
-
+  }
 }
 
 @media (max-width: 600px) {
@@ -85,10 +95,10 @@
       .inputContainer {
         grid-template-columns: 1fr;
       }
+      // don't use shortand
       .error-msg {
         font-size: 19px;
       }
     }
   }
 }
-
