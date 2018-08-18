@@ -1,33 +1,33 @@
-import * as React from 'react';
+import React from "react";
 
 interface InputProps {
+  field: string;
   placeholder: string;
-  text: string;
+  value: string;
   type: string;
-  onChange: (e: React.ChangeEvent<HTMLFormElement>) => void;
+  onChange: ({ field, value }: { field: string; value: string }) => void;
 }
 
-class Input extends React.PureComponent<InputProps> {
+export class Input extends React.PureComponent<InputProps> {
+  // define functions related to components in the component itself. this way you are controlling the onchange function in a single place.
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { field, onChange } = this.props;
+    onChange({ field, value: e.currentTarget.value });
+  };
+
   render() {
-    const {
-      onChange,
-      placeholder,
-      text,
-      type,
-    } = this.props;
+    const { placeholder, value, type } = this.props;
 
     return (
-      <>
-        <input
-          placeholder={placeholder}
-          // tslint:disable-next-line:no-any
-          onChange={(e: any) => onChange(e.target)}
-          type={type}
-          value={text}
-        />
-      </>
-    )
+      // <>
+      <input
+        placeholder={placeholder}
+        // the event automatically gets passed as the first parameter for event listeners so you don't have to define a callback
+        onChange={this.onChange}
+        type={type}
+        value={value}
+      />
+      // </>
+    );
   }
 }
-
-export default Input;

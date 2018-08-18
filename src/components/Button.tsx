@@ -1,31 +1,22 @@
-import * as React from 'react';
+import React from "react";
 
 interface ButtonProps {
+  // maybe text would be a better name? labels are usually in reference for form inputs
   label: string;
-  type: string;
-  onClick: (e: React.ChangeEvent<HTMLFormElement>) => void;
+  onClick: () => void;
 }
 
-class Button extends React.PureComponent<ButtonProps> {
-
-
+export class Button extends React.PureComponent<ButtonProps> {
   render() {
-    const { onClick, label, type } = this.props;
+    const { onClick, label } = this.props;
 
     return (
-      <>
-        <button
-          // tslint:disable-next-line:no-any
-          onClick={(e: any) => onClick(e)}
-          className="button-styles"
-          type={type}
-        >
-          {label}
-        </button>
-      </>
-    )
+      // no need for a fragment
+      // <>
+      <button onClick={onClick} className="button-styles">
+        {label}
+      </button>
+      // </>
+    );
   }
 }
-
-
-export default Button;

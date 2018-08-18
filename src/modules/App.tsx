@@ -1,117 +1,93 @@
-import * as React from 'react';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import {
-  logIn,
-  resetForm,
-  saveTextInput,
-} from '../redux/actions';
-import '../styles/app.scss';
+import React from "react";
+import { connect } from "react-redux";
+
+import { Button, Input } from "components";
+// you already imported this in index.tsx
+// import "../styles/app.scss";
+import { logIn, resetForm, saveTextInput } from "redux/actions";
+// this isn't a great name. it implies an action is being taken whereas this is just a constant
 import { setPassword } from "../password";
-import { connect } from 'react-redux'
-import { StoreState } from '../redux/reducers';
+import { AppProps, AppState, StoreState } from "./types";
 
-interface AppProps {
-  history?: { action: string }
-  text: string;
-  logIn: typeof logIn;
-  resetForm: typeof resetForm;
-  saveTextInput: typeof saveTextInput,
-}
-
-class App extends React.Component<AppProps> {
+// create interfaces for your state
+class App extends React.Component<AppProps, AppState> {
   state = {
-    isErrorMsgShown: false,
-    password: "",
-  }
+    // avoid using shorthand (msg). be as explicit as possible. I changed this to a string so that you can more easily display a variety of error messages
+    errorMessage: "",
+  };
 
-  onButtonClick = (e: React.ChangeEvent<HTMLFormElement>) => {
-    const { resetForm } = this.props;
-    if (e.target.type === "submit") {
-      this.onSubmit(e);
-    } else {
-      this.setState({ isErrorMsgShown: false, password: "" })
-      resetForm()
-    };
-  }
+  // you should always strive to have a separation of concerns. a function should do one thing.
+  reset = () => {
+    this.setState({ errorMessage: "" });
+    this.props.resetForm();
+  };
 
-  onSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-    const { password } = this.state;
-    const { logIn, text } = this.props;
+  submit = () => {
+    const { logIn, emailAddress, password } = this.props;
     const regex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const username = text;
+    const isFormValid = regex.test(emailAddress) && password === setPassword;
+
+    if (isFormValid) {
+      logIn();
+    } else {
+      this.setState({
+        errorMessage: "Error: your login information is incorrect. Try again.",
+      });
+    }
+  };
+
+  onFormSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    regex.test(username) && password === setPassword ?
-      logIn() :
-      this.setState({ isErrorMsgShown: true })
-  }
-
-  updateInput = (target: { value: string, type: string }) => {
-    const { saveTextInput } = this.props;
-
-    target.type === "text" ?
-      saveTextInput(target.value) :
-      this.setState({ password: target.value });
-  }
+  };
 
   render() {
-    const { isErrorMsgShown, password } = this.state;
-    const { history, text } = this.props;
+    const { errorMessage } = this.state;
+    const { saveTextInput, password, emailAddress } = this.props;
 
     return (
-      <div className={"app"}>
+      <div className="app">
         <h1>Login Form</h1>
-        <form
-          onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => (
-            this.onSubmit(e)
+        <form className="form" onSubmit={this.onFormSubmit}>
+          {errorMessage !== "" && (
+            <div className="error-msg center">{errorMessage}</div>
           )}
-          className="form"
-        >
-          {history && history.action === "REPLACE" ? "You must be logged in to continue" : ""}
-          {isErrorMsgShown ?
-            <div className="error-msg center">Error: your login information is incorrect. Try again.</div>
-            :
-            <div className="error-msg" />
-          }
-          <span className="inputContainer">
+          {/* don't use span as a block container. use a div instead. */}
+          <div className="inputContainer">
             <Input
-              // tslint:disable-next-line:no-any
-              onChange={(e: any) => this.updateInput(e)}
-              placeholder={"Email Address"}
-              text={text}
-              type={"text"}
+              field="emailAddress"
+              onChange={saveTextInput}
+              // you don't need to wrap strings in an object when passing them as props
+              placeholder="Email Address"
+              type="text"
+              value={emailAddress}
             />
             <Input
-              // tslint:disable-next-line:no-any
-              onChange={(e: any) => this.updateInput(e)}
-              placeholder={"Password..."}
-              text={password}
-              type={"password"}
+              field="password"
+              onChange={saveTextInput}
+              placeholder="Password..."
+              type="password"
+              value={password}
             />
-          </span>
-          <Button
-            label={"Submit"}
-            type={"submit"}
-            onClick={(e: React.ChangeEvent<HTMLFormElement>) => this.onButtonClick(e)}
-          />
-          <Button
-            label={"Reset"}
-            type={"reset"}
-            onClick={(e: React.ChangeEvent<HTMLFormElement>) => this.onButtonClick(e)}
-          />
+          </div>
+          <Button label="Submit" onClick={this.submit} />
+          <Button label="Reset" onClick={this.reset} />
         </form>
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state: StoreState) => ({
+  emailAddress: state.emailAddress,
   isLoggedIn: state.isLoggedIn,
-  text: state.text,
-})
+  password: state.password,
+});
 
-export const AppWrapped = connect(mapStateToProps, {
-  logIn,
-  resetForm,
-  saveTextInput,
-})(App)
+export const AppWrapped = connect(
+  mapStateToProps,
+  {
+    logIn,
+    resetForm,
+    saveTextInput,
+  }
+)(App);
